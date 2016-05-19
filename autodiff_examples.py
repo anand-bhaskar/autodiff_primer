@@ -79,6 +79,25 @@ for ax in [ax1, ax2]:
 plt.savefig("errors_fd_ad.pdf", bbox_inches="tight")
 
 
+# Plot relative error as a function of step size
+errs = []
+eps_range = 10**np.linspace(-4, -16, 25)
+
+for eps in eps_range:
+    # centered finite-difference
+    y_fd = np.array([(f(v+0.5*eps) - f(v-0.5*eps))/eps for v in x])
+    errs.append(np.max((y_fd-y_true)/y_true))
+errs = np.array(errs)
+
+# plot relative errors
+plt.loglog(eps_range, errs, label="Finite difference")
+plt.axhline(np.max((y_ad-y_true)/y_true), label="AD")
+plt.xlabel(r"Step size $\varepsilon$")
+plt.ylabel("Relative error in $df/dx$")
+plt.legend()
+plt.savefig("errors_step_size.pdf", bbox_inches="tight")
+
+
 # ### Gradients and Hessians (derivatives wrt multiple variables)
 
 # In[ ]:
